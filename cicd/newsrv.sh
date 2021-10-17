@@ -14,7 +14,7 @@ function install_docker {
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh get-docker.sh
     sudo groupadd docker
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker ubuntu
     newgrp docker
 }
 
@@ -40,11 +40,31 @@ function add_ubuntu_user {
     sudo chmod 0600 /home/ubuntu/.ssh/authorized_keys
 }
 
+function set_hostname {
+    read -p "IP address?" ipaddress
+    read -p "Hostname?" newhostname
+    echo "${ipaddress} ${newhostname}" | sudo tee -a /etc/hosts
+    sudo hostnamectl set-hostname "${newhostname}"
+    sudo systemctl restart docker
+}
+
+function init_docker_swarm {
+    docker swarm init
+    docker network create --driver=overlay traefik-public
+    # This is needed for elasticsearch (permanently set in /etc/sysctl.conf)
+    sudo sysctl -w vm.max_map_count=262144
+    sudo bash -c "echo 'vm.max_map_count=262144' >> /etc/sysctl.conf"
+}
+
 yes_or_no "Add swap?" && add_swap
 
 yes_or_no "Add ubuntu user?" && add_ubuntu_user
 
+yes_or_no "Install Docker?" && install_docker
+
+yes_or_no "Set hostname?" && set_hostname
+
+yes_or_no "Init swarm?" &&
+
 echo "You should now copy public ssh key from client and call this script to install docker."
 # cat ~/.ssh/shared.pub | ssh nft_prod_new_root 'cat > /home/ubuntu/.ssh/authorized_keys && echo "Key copied"'
-
-yes_or_no "Install Docker?" && install_docker
