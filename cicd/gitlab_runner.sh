@@ -2,13 +2,13 @@
 
 # bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
 
-set -e
+# set -e
 
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-sudo groupadd docker || true
-sudo usermod -aG docker "${USER}" || true
-newgrp docker || true
+sudo groupadd docker
+sudo usermod -aG docker "${USER}"
+newgrp docker
 
 docker volume create gitlab-runner-config
 
