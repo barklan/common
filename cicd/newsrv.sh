@@ -35,7 +35,7 @@ function add_ubuntu_user {
     mkdir -p /home/ubuntu/.ssh/
     touch /home/ubuntu/.ssh/authorized_keys
 
-    sudo chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+    sudo chown -R ubuntu:ubuntu /home/ubuntu
     sudo chmod 0700 /home/ubuntu/.ssh
     sudo chmod 0600 /home/ubuntu/.ssh/authorized_keys
 }
@@ -51,7 +51,8 @@ function set_hostname {
 function init_docker_swarm {
     docker swarm init
     docker network create --driver=overlay traefik-public
-    # This is needed for elasticsearch (permanently set in /etc/sysctl.conf)
+
+    # This is needed for elasticsearch
     sudo sysctl -w vm.max_map_count=262144
     sudo bash -c "echo 'vm.max_map_count=262144' >> /etc/sysctl.conf"
 }
@@ -67,4 +68,4 @@ yes_or_no "Set hostname?" && set_hostname
 yes_or_no "Init swarm?" &&
 
 echo "You should now copy public ssh key from client and call this script to install docker."
-# cat ~/.ssh/shared.pub | ssh nft_prod_new_root 'cat > /home/ubuntu/.ssh/authorized_keys && echo "Key copied"'
+# cat ~/.ssh/personal.pub | ssh test 'cat > /root/.ssh/authorized_keys && echo "Key copied"'
