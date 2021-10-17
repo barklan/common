@@ -32,10 +32,19 @@ function add_swap {
 
 function add_ubuntu_user {
     sudo adduser ubuntu
+    mkdir -p /home/ubuntu/.ssh/
+    touch /home/ubuntu/.ssh/authorized_keys
+
+    sudo chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+    sudo chmod 0700 /home/ubuntu/.ssh
+    sudo chmod 0600 /home/ubuntu/.ssh/authorized_keys
 }
 
-yes_or_no "Install Docker? [y/n]: " && install_docker
+yes_or_no "Add swap?" && add_swap
 
-yes_or_no "Add swap? [y/n]: " && add_swap
+yes_or_no "Add ubuntu user?" && add_ubuntu_user
 
-yes_or_no "Add ubuntu user? [y/n]: " && add_ubuntu_user
+echo "You should now copy public ssh key from client and call this script to install docker."
+# cat ~/.ssh/shared.pub | ssh nft_prod_new_root 'cat > /home/ubuntu/.ssh/authorized_keys && echo "Key copied"'
+
+yes_or_no "Install Docker?" && install_docker
