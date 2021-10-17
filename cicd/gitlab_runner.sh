@@ -9,20 +9,9 @@ docker run -d --name gitlab-runner --restart always \
     -v gitlab-runner-config:/etc/gitlab-runner \
     gitlab/gitlab-runner:latest
 
+docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest register
 
 read -d '' runnerconfig << EOF || true
-concurrent = 1
-check_interval = 0
-
-[session_server]
-  session_timeout = 900
-
-[[runners]]
-  name = "changemename"
-  url = "https://gitlab.com/"
-  token = "changemetoken"
-  executor = "docker"
-  [runners.custom_build_dir]
   [runners.cache]
     [runners.cache.s3]
     [runners.cache.gcs]
@@ -38,12 +27,8 @@ check_interval = 0
     shm_size = 0
 EOF
 
-sudo echo "${runnerconfig}" > /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
+sed -i '1,/custom_build_dir/!d' /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
 
-sudo sed -i "s/changemename/runner${RANDOM}/g" /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
-
-echo "Enter token: "
-read token
-sudo sed -i "s/changemetoken/${token}/g" /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
+sudo echo "  ${runnerconfig}" >> /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
 
 docker restart gitlab-runner
