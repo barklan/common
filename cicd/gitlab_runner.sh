@@ -6,15 +6,9 @@ set -e
 
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-
-if [ $(getent group docker) ]; then
-  echo "docker group exists."
-else
-    sudo groupadd docker
-fi
-
-sudo usermod -aG docker "${USER}"
-newgrp docker
+sudo groupadd docker || true
+sudo usermod -aG docker "${USER}" || true
+newgrp docker || true
 
 docker volume create gitlab-runner-config
 
