@@ -1,10 +1,18 @@
 #!/bin/bash
 
+# bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
+
 set -e
 
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-sudo groupadd docker
+
+if [ $(getent group docker) ]; then
+  echo "docker group exists."
+else
+    sudo groupadd docker
+fi
+
 sudo usermod -aG docker "${USER}"
 newgrp docker
 
