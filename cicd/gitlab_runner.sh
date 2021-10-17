@@ -2,8 +2,6 @@
 
 # bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
 
-set -e
-
 docker volume create gitlab-runner-config
 
 docker run -d --name gitlab-runner --restart always \
