@@ -65,7 +65,7 @@ yes_or_no "Install Docker?" && install_docker
 
 yes_or_no "Set hostname?" && set_hostname
 
-yes_or_no "Init swarm?" &&
+yes_or_no "Init swarm?" && init_docker_swarm
 
 echo "You should now copy public ssh key from client and call this script to install docker."
 # cat ~/.ssh/personal.pub | ssh test 'cat > /root/.ssh/authorized_keys && echo "Key copied"'
