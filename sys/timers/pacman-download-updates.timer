@@ -1,0 +1,10 @@
+[Unit]
+Description=Download latest arch updates every hour
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=2h
+Unit=pacman-download-updates.service
+
+[Install]
+WantedBy=timers.target

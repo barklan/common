@@ -1,0 +1,10 @@
+[Unit]
+Description=Prune docker system every day
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=docker-system-prune.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,7 @@
+[Unit]
+Description=Download the latest updates without installing them
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=pacman -Syu --downloadonly --noconfirm --quiet

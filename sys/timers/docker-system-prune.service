@@ -1,0 +1,6 @@
+[Unit]
+Description=Prune the docker system
+
+[Service]
+Type=oneshot
+ExecStart=docker image prune -f --filter "until=24h"
