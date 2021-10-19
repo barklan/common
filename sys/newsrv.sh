@@ -59,6 +59,13 @@ function init_docker_swarm {
     sudo bash -c "echo 'vm.max_map_count=262144' >> /etc/sysctl.conf"
 }
 
+function set_docker_system_prune_timer {
+    cd /etc/systemd/system
+    curl -O https://raw.githubusercontent.com/barklan/common/main/sys/timers/docker-system-prune.service
+    curl -O https://raw.githubusercontent.com/barklan/common/main/sys/timers/docker-system-prune.timer
+    systemctl enable --now docker-system-prune.timer
+}
+
 yes_or_no "Add swap?" && add_swap
 
 yes_or_no "Add ubuntu user?" && add_ubuntu_user
@@ -68,6 +75,8 @@ yes_or_no "Install Docker?" && install_docker
 yes_or_no "Set hostname?" && set_hostname
 
 yes_or_no "Init swarm?" && init_docker_swarm
+
+yes_or_no "Set daily docker system prune timer?" && set_docker_system_prune_timer
 
 echo "You should now copy public ssh key from client and call this script to install docker."
 # cat ~/.ssh/personal.pub | ssh runner3 'cat > /root/.ssh/authorized_keys && echo "Key copied"'
