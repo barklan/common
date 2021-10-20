@@ -27,7 +27,7 @@ read -d '' runnerconfig << EOF || true
     shm_size = 0
 EOF
 
-sed -i '1,/custom_build_dir/!d' /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
+sudo sed -i '1,/custom_build_dir/!d' /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
 
 sudo echo "  ${runnerconfig}" >> /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
 

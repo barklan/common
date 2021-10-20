@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "aws",
-        "sys"
+        "sys",
+        "cicd"
     ]
 }

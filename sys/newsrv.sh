@@ -61,9 +61,9 @@ function init_docker_swarm {
 
 function set_docker_system_prune_timer {
     cd /etc/systemd/system
-    curl -O https://raw.githubusercontent.com/barklan/common/main/sys/timers/docker-system-prune.service
-    curl -O https://raw.githubusercontent.com/barklan/common/main/sys/timers/docker-system-prune.timer
-    systemctl enable --now docker-system-prune.timer
+    sudo curl -O https://raw.githubusercontent.com/barklan/common/main/sys/timers/docker-system-prune.service
+    sudo curl -O https://raw.githubusercontent.com/barklan/common/main/sys/timers/docker-system-prune.timer
+    sudo systemctl enable --now docker-system-prune.timer
 }
 
 yes_or_no "Add swap?" && add_swap
