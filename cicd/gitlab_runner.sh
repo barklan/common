@@ -29,6 +29,6 @@ EOF
 
 sudo sed -i '1,/custom_build_dir/!d' /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
 
-sudo echo "  ${runnerconfig}" >> /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
+sudo bash -c 'echo "  ${runnerconfig}" >> /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml'
 
 docker restart gitlab-runner
