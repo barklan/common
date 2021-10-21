@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
+# bash <(curl -O https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
 
 docker volume create gitlab-runner-config
 
@@ -11,7 +11,7 @@ docker run -d --name gitlab-runner --restart always \
 
 docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest register
 
-read -d '' runnerconfig << EOF || true
+read -r -d '' runnerconfig << EOF || true
   [runners.cache]
     [runners.cache.s3]
     [runners.cache.gcs]
@@ -29,6 +29,6 @@ EOF
 
 sudo sed -i '1,/custom_build_dir/!d' /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml
 
-sudo bash -c 'echo "  ${runnerconfig}" >> /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml'
+sudo bash -c "echo '  ${runnerconfig}' >> /var/lib/docker/volumes/gitlab-runner-config/_data/config.toml"
 
 docker restart gitlab-runner
