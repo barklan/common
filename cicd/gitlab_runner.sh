@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bash <(curl -O https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
+# bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/cicd/gitlab_runner.sh)
 
 docker volume create gitlab-runner-config
 
