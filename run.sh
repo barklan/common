@@ -29,7 +29,6 @@ function _use_env {
 # * General purpose local functions.
 
 
-
 # ----------------------------------
 # * Non-local functions
 
