@@ -21,18 +21,17 @@ function _dc {
 }
 
 function _use_env {
-    sort -u environment/.env | grep -v '^$\|^\s*\#' > './environment/.env.tempfile'
-    export $(cat environment/.env.tempfile | xargs)
+    sort -u environment/local.env | grep -v '^$\|^\s*\#' > './environment/local.env.tempfile'
+    export $(cat environment/local.env.tempfile | xargs)
+    rm environment/local.env.tempfile
 }
 
 # ----------------------------------------------------------------------------
-# * General purpose local functions.
+# * General functions.
 
-
-# ----------------------------------
-# * Non-local functions
-
-
+function up {
+   echo "up"
+}
 
 # -----------------------------------------------------------------------------
 
