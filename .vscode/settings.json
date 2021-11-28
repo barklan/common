@@ -1,8 +1,5 @@
 {
     "conventionalCommits.scopes": [
-        "aws",
-        "sys",
-        "cicd",
-        "add fluentd with elasticsearch dockerfile"
+        "dockerfiles"
     ]
 }
