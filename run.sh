@@ -22,7 +22,7 @@ function _dc {
 
 function _use_env {
     sort -u environment/local.env | grep -v '^$\|^\s*\#' > './environment/local.env.tempfile'
-    export $(cat environment/local.env.tempfile | xargs)
+    export "$(< environment/local.env.tempfile xargs)"
     rm environment/local.env.tempfile
 }
 
@@ -30,7 +30,7 @@ function _use_env {
 # * General functions.
 
 function up {
-   echo "up"
+    echo "up"
 }
 
 # -----------------------------------------------------------------------------
