@@ -1,7 +1,7 @@
 ############################
 # STEP 1 build executable binary
 ############################
-FROM golang:alpine as builder
+FROM golang:1.17.3-alpine as builder
 
 ARG BUILDKIT_INLINE_CACHE=1
 ARG APP_NAME=changeme
