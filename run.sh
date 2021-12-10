@@ -27,7 +27,6 @@ function _use_local_env {
 }
 
 # ----------------------------------------------------------------------------
-# * General functions.
 
 function up {
     echo "up"
