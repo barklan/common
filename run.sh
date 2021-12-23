@@ -20,10 +20,8 @@ function _dc {
     docker-compose ${TTY} "${@}"
 }
 
-function _use_local_env {
-    sort -u environment/local.env | grep -v '^$\|^\s*\#' > './environment/local.env.tempfile'
-    export "$(< environment/local.env.tempfile xargs)"
-    rm environment/local.env.tempfile
+function _use_env {
+    set -o allexport; . .env; set +o allexport
 }
 
 # ----------------------------------------------------------------------------
