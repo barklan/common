@@ -1,11 +1,13 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"regexp"
+	"strings"
 )
 
 const start = `{
@@ -20,7 +22,7 @@ const end = `
 var runshFilepath, tasksFilepath string
 
 func runShCmds(path string) []string {
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		log.Panicln("failed to read run.sh", err)
 	}
@@ -52,6 +54,13 @@ func main() {
 		log.Panicln("empty filepaths")
 	}
 
+	vscodeDir := strings.TrimSuffix(tasksFilepath, "/tasks.json")
+	if err := os.Mkdir(vscodeDir, 0755); err != nil {
+		if !errors.Is(err, os.ErrExist) {
+			panic(err)
+		}
+	}
+
 	cmds := runShCmds(runshFilepath)
 	var opts string
 	for _, cmd := range cmds {
@@ -67,8 +76,10 @@ func main() {
 
 	taskfile := start + opts + end
 
-	err := ioutil.WriteFile(tasksFilepath, []byte(taskfile), 0777)
+	err := os.WriteFile(tasksFilepath, []byte(taskfile), 0777)
 	if err != nil {
 		panic(err)
 	}
+
+	log.Println("tasks.json generated!")
 }
