@@ -27,7 +27,7 @@ func runShCmds(path string) []string {
 		log.Panicln("failed to read run.sh", err)
 	}
 
-	r, err := regexp.Compile(`function (\S*) {`)
+	r, err := regexp.Compile(`(\S*) *\(\) *({|\()`)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -66,7 +66,7 @@ func main() {
 	for _, cmd := range cmds {
 		task := fmt.Sprintf(`
 		{
-            "label": "run.sh %s",
+            "label": "r/%s",
             "type": "shell",
             "command": "bash -i run.sh %s",
             "isBackground": true,
