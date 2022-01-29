@@ -12,6 +12,14 @@ import (
 
 const start = `{
     "version": "2.0.0",
+    "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true
+    },
     "tasks": [`
 
 const end = `
