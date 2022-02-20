@@ -88,7 +88,7 @@ func main() {
 	var opts string
 	for _, cmd := range cmds {
 		var task string
-		if strings.Contains(cmd, "up:") {
+		if cmd == "up" || strings.Contains(cmd, "up:") {
 			task = fmt.Sprintf(backgroundTask, cmd, cmd)
 		} else {
 			task = fmt.Sprintf(normalTask, cmd, cmd)
