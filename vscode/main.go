@@ -27,6 +27,21 @@ const end = `
 }
 `
 
+const backgroundTask = `
+		{
+			"label": "r/%s",
+			"type": "shell",
+			"command": "bash -i run.sh %s",
+			"isBackground": true,
+		},`
+
+const normalTask = `
+		{
+			"label": "r/%s",
+			"type": "shell",
+			"command": "bash -i run.sh %s",
+		},`
+
 var runshFilepath, tasksFilepath string
 
 func runShCmds(path string) []string {
@@ -72,13 +87,12 @@ func main() {
 	cmds := runShCmds(runshFilepath)
 	var opts string
 	for _, cmd := range cmds {
-		task := fmt.Sprintf(`
-		{
-            "label": "r/%s",
-            "type": "shell",
-            "command": "bash -i run.sh %s",
-            "isBackground": true,
-        },`, cmd, cmd)
+		var task string
+		if strings.Contains(cmd, "up:") {
+			task = fmt.Sprintf(backgroundTask, cmd, cmd)
+		} else {
+			task = fmt.Sprintf(normalTask, cmd, cmd)
+		}
 		opts += task
 	}
 
