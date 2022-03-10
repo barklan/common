@@ -28,7 +28,7 @@ function add_swap {
     sudo swapon /swapfile
     echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
-    sudo bash -c "echo 'vm.swappiness = 10' >> /etc/sysctl.conf"
+    # sudo bash -c "echo 'vm.swappiness = 60' >> /etc/sysctl.conf"
     sudo sysctl -p
 }
 
@@ -78,5 +78,4 @@ yes_or_no "Init swarm?" && init_docker_swarm
 
 yes_or_no "Set daily docker system prune timer?" && set_docker_system_prune_timer
 
-echo "You should now copy public ssh key from client and call this script to install docker."
-# cat ~/.ssh/personal.pub | ssh runner3 'cat > /root/.ssh/authorized_keys && echo "Key copied"'
+echo "All done!"
