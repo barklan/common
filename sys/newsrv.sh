@@ -52,7 +52,7 @@ function set_hostname {
 
 function init_docker_swarm {
     docker swarm init
-    docker network create --driver=overlay traefik-public
+    docker network create --driver=overlay --attachable traefik-public
 
     # This is needed for elasticsearch
     sudo sysctl -w vm.max_map_count=262144
