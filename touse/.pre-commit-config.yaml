@@ -89,6 +89,8 @@ repos:
     rev: v0.31.1
     hooks:
       - id: markdownlint
+        args:
+          - "--disable=MD013"
   - repo: https://github.com/golangci/golangci-lint
     rev: v1.45.2
     hooks:
@@ -105,6 +107,7 @@ repos:
     rev: v0.8.0.4
     hooks:
       - id: shellcheck
+        args: ["--severity=warning"]
   # Python specific
   - repo: https://github.com/psf/black
     rev: 22.3.0
