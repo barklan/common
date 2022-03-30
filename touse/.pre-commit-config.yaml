@@ -167,6 +167,6 @@ ci:
   autoupdate_branch: ""
   autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: monthly
-  # These require either docker or docker-compose.
-  skip: [dotenv-linter, openapi-linter, docker-compose-check]
+  # These require either docker or docker-compose. Use separate job for golangci-lint.
+  skip: [dotenv-linter, openapi-linter, docker-compose-check, golangci-lint]
   submodules: false
