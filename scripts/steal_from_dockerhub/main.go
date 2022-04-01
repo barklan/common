@@ -34,7 +34,7 @@ func main() {
 	fatalOnErr("", err)
 	files := filesOfInterest(workspaceDir, reg)
 
-	reg, err = regexp.Compile(`\${DOCKER_IMAGE_PREFIX.*}(\S*)( |')`)
+	reg, err = regexp.Compile(`\${DOCKER_IMAGE_PREFIX.*}([^\s'"]+)('?)`)
 	fatalOnErr("", err)
 	allImages := make([]string, 0)
 	for _, file := range files {
