@@ -36,6 +36,7 @@ repos:
     rev: v1.2.0
     hooks:
       - id: detect-secrets
+        exclude: ".*_test.go$"
   - repo: https://github.com/zricethezav/gitleaks
     rev: v8.5.3
     hooks:
