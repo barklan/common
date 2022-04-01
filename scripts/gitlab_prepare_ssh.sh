@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# IP_ADDRESS=${IP_ADDRESS} ACCESS_KEY=${ACCESS_KEY} bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/scripts/prepare_ssh.sh)
+# IP_ADDRESS=${IP_ADDRESS} ACCESS_KEY=${ACCESS_KEY} bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/scripts/gitlab_prepare_ssh.sh)
 
 set -e
 
