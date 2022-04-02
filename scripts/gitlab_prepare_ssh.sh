@@ -1,8 +1,6 @@
 #! /usr/bin/env bash
 
-# IP_ADDRESS=${IP_ADDRESS} ACCESS_KEY=${ACCESS_KEY} bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/scripts/gitlab_prepare_ssh.sh)
-
-set -e
+set -ex
 
 export ACCESS_KEY=${ACCESS_KEY?Variable not set}
 export IP_ADDRESS=${IP_ADDRESS?Variable not set}

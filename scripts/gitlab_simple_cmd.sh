@@ -1,7 +1,6 @@
 #! /usr/bin/env bash
 
-# Exit in case of error
-set -e
+set -ex
 
 export ACCESS_KEY=${ACCESS_KEY?Variable not set}
 export IP_ADDRESS=${IP_ADDRESS?Variable not set}
