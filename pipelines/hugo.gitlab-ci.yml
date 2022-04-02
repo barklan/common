@@ -1,0 +1,21 @@
+image: "${CI_REGISTRY_IMAGE}/barklan/go-arch-builder:1.4.0"
+
+workflow:
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+stages:
+  - build
+  - deploy
+
+build-hugo:
+  needs: []
+  stage: build
+  script: |
+    hugo mod get -u
+    hugo --gc --minify
+    bash scripts/gitlab_prepare_ssh.sh
+    LOCAL_DIR=public/ REMOTE_DIR=static/dev bash scripts/gitlab_simple_transfer.sh
+  rules:
+    - allow_failure: false
