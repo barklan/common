@@ -65,6 +65,9 @@ func findImagesInFile(file string, reg *regexp.Regexp) ([]string, bool) {
 	images := make([]string, 0)
 	for _, match := range matches {
 		image := match[2]
+		if image[0] == '/' {
+			image = image[1:]
+		}
 		images = append(images, image)
 	}
 	return images, true
