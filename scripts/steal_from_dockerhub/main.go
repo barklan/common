@@ -34,7 +34,7 @@ func main() {
 	fatalOnErr("", err)
 	files := filesOfInterest(workspaceDir, reg)
 
-	reg, err = regexp.Compile(`\${DOCKER_IMAGE_PREFIX.*}([^\s'"]+)('?)`)
+	reg, err = regexp.Compile(`\${(DOCKER_IMAGE_PREFIX|CI_REGISTRY_IMAGE).*}([^\s'"]+)('?)`)
 	fatalOnErr("", err)
 	allImages := make([]string, 0)
 	for _, file := range files {
@@ -64,7 +64,7 @@ func findImagesInFile(file string, reg *regexp.Regexp) ([]string, bool) {
 
 	images := make([]string, 0)
 	for _, match := range matches {
-		image := match[1]
+		image := match[2]
 		images = append(images, image)
 	}
 	return images, true
@@ -100,7 +100,7 @@ func filesOfInterest(path string, reg *regexp.Regexp) []string {
 			return nil
 		}
 
-		if reg.Match([]byte(filename)) && string(filename[0]) != "." {
+		if reg.Match([]byte(filename)) {
 			files = append(files, path)
 		}
 		return nil
