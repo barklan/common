@@ -1,7 +1,4 @@
-// Backs up all repos from GitHub.
-// gh command line tool must be installed and authenticated.
-// glab has not yet released "glab repo list" command
-// https://github.com/profclems/glab/issues/671
+// Backs up all repos from GitHub and GitLab.
 package main
 
 import (
