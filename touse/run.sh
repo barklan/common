@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -eo pipefail
+set +o history
 
 DC="${DC:-exec}"
 
