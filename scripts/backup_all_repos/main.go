@@ -1,3 +1,7 @@
+// Backs up all repos from GitHub.
+// gh command line tool must be installed and authenticated.
+// glab has not yet released "glab repo list" command
+// https://github.com/profclems/glab/issues/671
 package main
 
 import (
@@ -12,15 +16,24 @@ import (
 	"time"
 )
 
+const backupDirPrefix = "br_"
+
 var ghOrgs = []string{
 	"barklan",
 	"barklan-junk-yard",
 }
 
+var glOrgs = []string{
+	"nftgalleryx",
+	"hrtalents",
+	"qufiwefefwoyn",
+	"buzin.gb",
+}
+
 func prepareDir() (string, error) {
 	now := time.Now()
 	date := now.Format("2006_01_02")
-	backupDir := "repos_" + date
+	backupDir := backupDirPrefix + date
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("failed to get home directory: %w", err)
@@ -68,12 +81,36 @@ func github(backupDir string) error {
 		if err != nil {
 			return fmt.Errorf("failed to get list of github repos: %w", err)
 		}
-		log.Println("found github repos: ", repos)
 		for _, repo := range repos {
 			if err := cloneOneGHRepo(org, repo, backupDir); err != nil {
 				return fmt.Errorf("failed to clone gh repo: %w", err)
 			}
+			log.Printf("cloned %q from GitHub\n", repo)
 		}
+	}
+	return nil
+}
+
+func gitlab(backupDir string) error {
+	for _, org := range glOrgs {
+		orgDir := filepath.Join(backupDir, org)
+		if err := os.Mkdir(orgDir, 0o755); err != nil {
+			return fmt.Errorf("failed to create directory for organization %s: %w", org, err)
+		}
+		wd, err := os.Getwd()
+		if err != nil {
+			return fmt.Errorf("failed to get current working directory: %w", err)
+		}
+		if err := os.Chdir(orgDir); err != nil {
+			return fmt.Errorf("failed to change directory to %s: %w", orgDir, err)
+		}
+		if _, err := exec.Command("glab", "repo", "clone", "-g", org).Output(); err != nil {
+			return fmt.Errorf("failed to clone repos from organization %s: %w", org, err)
+		}
+		if err := os.Chdir(wd); err != nil {
+			return fmt.Errorf("failed to change directory back to %s: %w", wd, err)
+		}
+		log.Printf("cloned all repos from %q organization from GitLab\n", org)
 	}
 	return nil
 }
@@ -86,6 +123,10 @@ func backup() error {
 
 	if err := github(backupDir); err != nil {
 		return fmt.Errorf("failed to backup github: %w", err)
+	}
+
+	if err := gitlab(backupDir); err != nil {
+		return fmt.Errorf("failed to backup gitlab: %w", err)
 	}
 
 	log.Println("all done!")
