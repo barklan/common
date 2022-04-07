@@ -9,22 +9,33 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
 
-const backupDirPrefix = "br_"
+const (
+	backupDirPrefix = "hashi_"
+	shallow         = true
+)
 
 var ghOrgs = []string{
-	"barklan",
-	"barklan-junk-yard",
+	// "barklan",
+	// "barklan-junk-yard",
+	"hashicorp",
 }
 
 // Don't use your GitLab username as organization!
 var glOrgs = []string{
-	"nftgalleryx",
-	"hrtalents",
-	"qufiwefefwoyn",
+	// "nftgalleryx",
+	// "hrtalents",
+	// "qufiwefefwoyn",
+}
+
+type ghJob struct {
+	Org       string
+	Repo      string
+	BackupDir string
 }
 
 func prepareDir() (string, error) {
@@ -41,6 +52,16 @@ func prepareDir() (string, error) {
 		return "", fmt.Errorf("failed to create backup directory: %w", err)
 	}
 	return fullBackupDir, nil
+}
+
+func worker(id int, jobs <-chan ghJob, results chan<- struct{}) {
+	for j := range jobs {
+		if err := cloneOneGHRepo(j.Org, j.Repo, j.BackupDir); err != nil {
+			fmt.Printf("failed to clone one repo %q: %v\n", j.Repo, err)
+		}
+		log.Printf("cloned %q from GitHub (worker %d)\n", j.Repo, id)
+		results <- struct{}{}
+	}
 }
 
 func getGHRepos(org string) ([]string, error) {
@@ -62,7 +83,12 @@ func getGHRepos(org string) ([]string, error) {
 func cloneOneGHRepo(org, repo, backupDir string) error {
 	repoName := strings.Split(repo, "/")[1]
 	repoPath := filepath.Join(backupDir, org, repoName)
-	if _, err := exec.Command("gh", "repo", "clone", repo, repoPath).Output(); err != nil {
+	extraArgs := []string{}
+	if shallow {
+		extraArgs = append(extraArgs, "--", "--depth=1")
+	}
+	args := append([]string{"repo", "clone", repo, repoPath}, extraArgs...)
+	if _, err := exec.Command("gh", args...).Output(); err != nil {
 		return fmt.Errorf("failed to clone one repo: %w", err)
 	}
 	return nil
@@ -78,11 +104,20 @@ func github(backupDir string) error {
 		if err != nil {
 			return fmt.Errorf("failed to get list of github repos: %w", err)
 		}
+
+		numRepos := len(repos)
+		jobs := make(chan ghJob, numRepos)
+		results := make(chan struct{}, numRepos)
+		numWorkers := runtime.NumCPU() * 2
+		for w := 1; w <= numWorkers; w++ {
+			go worker(w, jobs, results)
+		}
+		fmt.Printf("Started %d workers to pull from GitHub\n", numWorkers)
 		for _, repo := range repos {
-			if err := cloneOneGHRepo(org, repo, backupDir); err != nil {
-				return fmt.Errorf("failed to clone gh repo: %w", err)
-			}
-			log.Printf("cloned %q from GitHub\n", repo)
+			jobs <- ghJob{Org: org, Repo: repo, BackupDir: backupDir}
+		}
+		for i := 0; i < numRepos; i++ {
+			<-results
 		}
 	}
 	return nil
