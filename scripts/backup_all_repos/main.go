@@ -20,11 +20,11 @@ var ghOrgs = []string{
 	"barklan-junk-yard",
 }
 
+// Don't use your GitLab username as organization!
 var glOrgs = []string{
 	"nftgalleryx",
 	"hrtalents",
 	"qufiwefefwoyn",
-	"buzin.gb",
 }
 
 func prepareDir() (string, error) {
