@@ -71,6 +71,7 @@ function install_extra_tools {
         echo "Arch Linux detected, using pacman"
         sudo pacman -Syu mcfly bottom choose sd fd xh strace ripgrep lua fzf neovim
     elif which apt &>/dev/null; then
+        apt update && apt install -y curl git
         echo "Debian-based distibution detected, will install and use Homebrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         brew tap cantino/mcfly
@@ -128,5 +129,7 @@ yes_or_no "Set hostname?" && set_hostname
 yes_or_no "Init swarm?" && init_docker_swarm
 
 yes_or_no "Set daily docker system prune timer?" && set_docker_system_prune_timer
+
+yes_or_no "Install extra tools? " && install_extra_tools "$@"
 
 echo "All done!"
