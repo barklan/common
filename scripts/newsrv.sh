@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/scripts/newsrv.sh)
+# bash <(curl -s https://scripts.barklan.com/newsrv.sh)
 
 function yes_or_no {
     while true; do
@@ -81,9 +82,11 @@ function install_extra_tools {
         echo "Arch Linux detected, using pacman"
         sudo pacman -Syu mcfly bottom choose sd fd xh strace ripgrep lua fzf neovim
     elif which apt &>/dev/null; then
-        apt update && apt install -y curl git
         echo "Debian-based distibution detected, will install and use Homebrew"
+        sudo apt update && sudo apt install -y curl git build-essential
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo 'eval "$(/home/ubuntu/.linuxbrew/bin/brew shellenv)"' >> /home/ubuntu/.profile
+        eval "$(/home/ubuntu/.linuxbrew/bin/brew shellenv)"
         brew tap cantino/mcfly
         brew install cantino/mcfly/mcfly
         brew install bottom choose-rust sd fd xh ripgrep lua fzf neovim
