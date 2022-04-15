@@ -91,7 +91,7 @@ function install_extra_tools {
         echo "Unknown distibution, skipping extra tools"
     fi
 
-    cat << EOF >> ~/.bashrc
+    cat << "EOF" >> ~/.bashrc
 alias ..="cd .."
 alias ...="cd ../.."
 
@@ -125,13 +125,6 @@ function j() {
 
 eval "$(mcfly init bash)"
 EOF
-}
-
-function homebrew_tools {
-        brew tap cantino/mcfly
-        brew install cantino/mcfly/mcfly
-        brew install bottom choose-rust sd fd xh ripgrep lua fzf neovim
-        echo 'eval "$(mcfly init bash)"' >> ~/.bashrc
 }
 
 yes_or_no "Add swap?" && add_swap
