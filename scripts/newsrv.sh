@@ -82,14 +82,11 @@ function install_extra_tools {
         echo "Arch Linux detected, using pacman"
         sudo pacman -Syu mcfly bottom choose sd fd xh strace ripgrep lua fzf neovim
     elif which apt &>/dev/null; then
-        echo "Debian-based distibution detected, will install and use Homebrew"
-        sudo apt update && sudo apt install -y curl git build-essential
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        echo 'eval "$(/home/ubuntu/.linuxbrew/bin/brew shellenv)"' >> /home/ubuntu/.profile
-        eval "$(/home/ubuntu/.linuxbrew/bin/brew shellenv)"
-        brew tap cantino/mcfly
-        brew install cantino/mcfly/mcfly
-        brew install bottom choose-rust sd fd xh ripgrep lua fzf neovim
+        echo "Debian-based distibution detected, will install only a subset of tools"
+        sudo apt update && sudo apt install -y curl git build-essential fzf lua5.3
+        curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
+        curl -LO https://github.com/ClementTsang/bottom/releases/download/0.6.8/bottom_0.6.8_amd64.deb
+        sudo dpkg -i bottom_0.6.8_amd64.deb
     else
         echo "Unknown distibution, skipping extra tools"
     fi
@@ -128,7 +125,13 @@ function j() {
 
 eval "$(mcfly init bash)"
 EOF
+}
 
+function homebrew_tools {
+        brew tap cantino/mcfly
+        brew install cantino/mcfly/mcfly
+        brew install bottom choose-rust sd fd xh ripgrep lua fzf neovim
+        echo 'eval "$(mcfly init bash)"' >> ~/.bashrc
 }
 
 yes_or_no "Add swap?" && add_swap
