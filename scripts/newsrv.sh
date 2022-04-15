@@ -32,7 +32,7 @@ function add_swap {
     sudo sysctl -p
 }
 
-function add_ubuntu_user {
+function add_ubuntu_user_sudo {
     sudo adduser ubuntu
     mkdir -p /home/ubuntu/.ssh/
     touch /home/ubuntu/.ssh/authorized_keys
@@ -40,6 +40,16 @@ function add_ubuntu_user {
     sudo chown -R ubuntu:ubuntu /home/ubuntu
     sudo chmod 0700 /home/ubuntu/.ssh
     sudo chmod 0600 /home/ubuntu/.ssh/authorized_keys
+}
+
+function add_ubuntu_user_nosudo {
+    adduser ubuntu
+    mkdir -p /home/ubuntu/.ssh/
+    touch /home/ubuntu/.ssh/authorized_keys
+
+    chown -R ubuntu:ubuntu /home/ubuntu
+    chmod 0700 /home/ubuntu/.ssh
+    chmod 0600 /home/ubuntu/.ssh/authorized_keys
 }
 
 function set_hostname {
@@ -120,7 +130,9 @@ EOF
 
 yes_or_no "Add swap?" && add_swap
 
-yes_or_no "Add ubuntu user?" && add_ubuntu_user
+yes_or_no "Add ubuntu user? (sudo)" && add_ubuntu_user_sudo
+
+yes_or_no "Add ubuntu user? (no sudo)" && add_ubuntu_user_nosudo
 
 yes_or_no "Install Docker?" && install_docker
 
