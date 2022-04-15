@@ -66,6 +66,57 @@ function set_docker_system_prune_timer {
     sudo systemctl enable --now docker-system-prune.timer
 }
 
+function install_extra_tools {
+    if which pacman &>/dev/null; then
+        echo "Arch Linux detected, using pacman"
+        sudo pacman -Syu mcfly bottom choose sd fd xh strace ripgrep lua fzf neovim
+    elif which apt &>/dev/null; then
+        echo "Debian-based distibution detected, will install and use Homebrew"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        brew tap cantino/mcfly
+        brew install cantino/mcfly/mcfly
+        brew install bottom choose-rust sd fd xh ripgrep lua fzf neovim
+    else
+        echo "Unknown distibution, skipping extra tools"
+    fi
+
+    cat << EOF >> ~/.bashrc
+alias ..="cd .."
+alias ...="cd ../.."
+
+shopt -s histappend
+shopt -s cmdhist
+
+export HISTSIZE=20000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoreboth:erasedups
+export HISTIGNORE="rm *:#*"
+
+function j() {
+    if [[ "$#" != 0 ]]; then
+        builtin cd "$@";
+        return
+    fi
+    while true; do
+        local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;')
+        local dir="$(printf '%s\n' "${lsd[@]}" |
+            fzf --reverse --preview '
+                __cd_nxt="$(echo {})";
+                __cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+                echo $__cd_path;
+                echo;
+                ls -p --color=always "${__cd_path}";
+        ')"
+        [[ ${#dir} != 0 ]] || return 0
+        builtin cd "$dir" &> /dev/null
+    done
+}
+
+eval "$(mcfly init bash)"
+EOF
+
+}
+
 yes_or_no "Add swap?" && add_swap
 
 yes_or_no "Add ubuntu user?" && add_ubuntu_user
