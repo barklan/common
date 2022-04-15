@@ -124,6 +124,9 @@ function j() {
 }
 
 eval "$(mcfly init bash)"
+export MCFLY_FUZZY=2
+export MCFLY_RESULTS=15
+export MCFLY_DISABLE_MENU=TRUE
 EOF
 }
 
