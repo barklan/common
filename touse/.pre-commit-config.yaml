@@ -26,7 +26,12 @@ repos:
     rev: v0.17.0
     hooks:
       - id: gitlint
-        args: ["--ignore=body-is-missing", "--contrib=contrib-title-conventional-commits", "--msg-filename"]
+        args:
+          [
+            "--ignore=body-is-missing,body-min-length",
+            "--contrib=contrib-title-conventional-commits",
+            "--msg-filename",
+          ]
   - repo: https://github.com/codespell-project/codespell
     rev: v2.1.0
     hooks:
@@ -50,11 +55,12 @@ repos:
     hooks:
       - id: hadolint
   - repo: https://github.com/barklan/git-hooks
-    rev: v0.0.20
+    rev: v0.0.21
     hooks:
       - id: go-test
       - id: forbid-binary
       - id: docker-compose-check
+      - id: snake-case-filenames
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 0.11.2
     hooks:
@@ -67,16 +73,6 @@ repos:
       - id: check-github-actions
   - repo: local
     hooks:
-      - id: golang-filenames
-        name: check go filenames
-        entry: go filenames must be snake_case
-        language: fail
-        files: '[a-z0-9_/]*[^a-z0-9_/]+[a-z0-9_]*\.go$'
-      - id: python-filenames
-        name: check py filenames
-        entry: py filenames must be snake_case
-        language: fail
-        files: '[a-z0-9_/]*[^a-z0-9_/]+[a-z0-9_]*\.py$'
       - id: dotenv-linter
         name: run dotenv linter
         language: docker_image
@@ -110,6 +106,13 @@ repos:
     hooks:
       - id: shellcheck
         args: ["--severity=warning"]
+
+  # Lua specific
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v0.13.1
+    hooks:
+      - id: stylua
+
   # Python specific
   - repo: https://github.com/psf/black
     rev: 22.3.0
@@ -164,7 +167,7 @@ ci:
   autofix_prs: false
   autoupdate_branch: ""
   autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
-  autoupdate_schedule: monthly
+  autoupdate_schedule: quarterly
   # These require either docker or docker-compose. Use separate job for golangci-lint.
   skip: [dotenv-linter, openapi-linter, docker-compose-check, golangci-lint]
   submodules: false
