@@ -1,0 +1,4 @@
+[scripts-to-srv]
+command=rsync -azvc --delete scripts/ barklan:static/scripts
+save=2
+cwd=<root>
