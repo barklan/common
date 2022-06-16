@@ -17,6 +17,15 @@ repos:
       - id: check-symlinks
       - id: mixed-line-ending
         args: ["--fix=no"]
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.21.0
+    hooks:
+      - id: yamllint
+        args: [--format, parsable, --strict]
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.2.1
+    hooks:
+      - id: yamlfmt
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v2.23.0
     hooks:
