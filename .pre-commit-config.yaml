@@ -1,0 +1,13 @@
+---
+default_stages: [commit]
+repos:
+  - repo: local
+    hooks:
+      - id: deploy
+        name: deploy
+        always_run: true
+        stages: [post-commit]
+        language: system
+        entry: >-
+          bash -c 'hugo --gc --minify && rsync -azvc --delete --exclude .git/
+          ./ barklan:static/common
