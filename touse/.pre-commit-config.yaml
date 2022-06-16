@@ -83,18 +83,6 @@ repos:
       - id: check-github-workflows
       - id: check-gitlab-ci
       - id: check-github-actions
-  - repo: local
-    hooks:
-      - id: dotenv-linter
-        name: run dotenv linter
-        language: docker_image
-        entry: dotenvlinter/dotenv-linter --recursive
-        files: \.env$
-      - id: openapi-linter
-        name: validate openapi schema
-        language: docker_image
-        entry: redocly/openapi-cli lint docs/openapi.yml
-        files: ^docs/openapi.yml$
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.31.1
     hooks:
@@ -119,6 +107,20 @@ repos:
     hooks:
       - id: prettier
       - types_or: [css, javascript, ts, vue, html, scss]
+
+  # NOTE: require docker
+  - repo: local
+    hooks:
+      - id: dotenv-linter
+        name: run dotenv linter
+        language: docker_image
+        entry: dotenvlinter/dotenv-linter --recursive
+        files: \.env$
+      - id: openapi-linter
+        name: validate openapi schema
+        language: docker_image
+        entry: redocly/openapi-cli lint docs/openapi.yml
+        files: ^docs/openapi.yml$
 
   # Post-commit
   - repo: local
@@ -197,7 +199,6 @@ repos:
 ci:
   autofix_commit_msg: |
     [pre-commit.ci] auto fixes from pre-commit.com hooks
-    for more information, see https://pre-commit.ci
   autofix_prs: false
   autoupdate_branch: ""
   autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
