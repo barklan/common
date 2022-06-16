@@ -89,10 +89,6 @@ repos:
       - id: markdownlint
         args:
           - "--disable=MD013"
-  - repo: https://github.com/golangci/golangci-lint
-    rev: v1.45.2
-    hooks:
-      - id: golangci-lint
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.64.0
     hooks:
@@ -118,6 +114,15 @@ repos:
         entry: >-
           bash -c 'hugo --gc --minify && rsync -azvc --delete
           public/ barklan:static/notes'
+
+  # Go specific
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.45.2
+    hooks:
+      - id: golangci-lint
+        args:
+          - --enable-all
+          - --disable=wsl
 
   # Lua specific
   - repo: https://github.com/JohnnyMorganz/StyLua
