@@ -180,22 +180,6 @@ repos:
     rev: v0.961
     hooks:
       - id: mypy
-  # TODO configure
-  # https://github.com/jendrikseipp/vulture#configuration
-  # - repo: https://github.com/jendrikseipp/vulture
-  #   rev:  v2.3
-  #   hooks:
-  #     - id: vulture
-  # TODO configure
-  # - repo: local
-  #   hooks:
-  #     - id: pytest-check
-  #       name: pytest-check
-  #       entry: pdm run pytest --ignore-glob=__pypackages__
-  #       language: system
-  #       types: [python]
-  #       pass_filenames: false
-  #       always_run: true
 ci:
   autofix_commit_msg: |
     [pre-commit.ci] auto fixes from pre-commit.com hooks
