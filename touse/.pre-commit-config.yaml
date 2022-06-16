@@ -58,6 +58,7 @@ repos:
     rev: v0.0.21
     hooks:
       - id: go-test
+      - id: go-format
       - id: forbid-binary
       - id: docker-compose-check
       - id: snake-case-filenames
@@ -102,6 +103,10 @@ repos:
     hooks:
       - id: shellcheck
         args: ["--severity=warning"]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
 
   # Post-commit
   - repo: local
