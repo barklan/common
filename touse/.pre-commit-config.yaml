@@ -1,3 +1,4 @@
+---
 default_stages: [commit]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -14,7 +15,6 @@ repos:
         exclude: ".vscode/tasks.json"
       - id: check-case-conflict
       - id: check-symlinks
-      # - id: no-commit-to-branch
       - id: mixed-line-ending
         args: ["--fix=no"]
   - repo: https://github.com/commitizen-tools/commitizen
@@ -106,6 +106,18 @@ repos:
     hooks:
       - id: shellcheck
         args: ["--severity=warning"]
+
+  # Post-commit
+  - repo: local
+    hooks:
+      - id: post-commit-local
+        name: post commit
+        always_run: true
+        stages: [post-commit]
+        language: system
+        entry: >-
+          bash -c 'hugo --gc --minify && rsync -azvc --delete
+          public/ barklan:static/notes'
 
   # Lua specific
   - repo: https://github.com/JohnnyMorganz/StyLua
