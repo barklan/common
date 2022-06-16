@@ -10,4 +10,4 @@ repos:
         language: system
         entry: >-
           bash -c 'hugo --gc --minify && rsync -azvc --delete --exclude .git/
-          ./ barklan:static/common
+          ./ barklan:static/common'
