@@ -9,5 +9,5 @@ repos:
         stages: [post-commit]
         language: system
         entry: >-
-          bash -c 'hugo --gc --minify && rsync -azvc --delete --exclude .git/
+          bash -c 'rsync -azvc --delete --exclude .git/
           ./ barklan:static/common'
