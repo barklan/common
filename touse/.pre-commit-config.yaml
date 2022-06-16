@@ -24,10 +24,6 @@ repos:
     hooks:
       - id: yamllint
         args: [--format, parsable, --strict]
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.1
-    hooks:
-      - id: yamlfmt
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v2.27.1
     hooks:
@@ -106,7 +102,7 @@ repos:
     rev: v2.7.1
     hooks:
       - id: prettier
-        types_or: [css, javascript, ts, vue, html, scss]
+        types_or: [css, javascript, ts, vue, html, scss, yaml]
 
   # NOTE: require docker
   - repo: local
