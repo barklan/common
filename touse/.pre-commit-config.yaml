@@ -142,9 +142,6 @@ repos:
     rev: v1.46.2
     hooks:
       - id: golangci-lint
-        args:
-          - --enable-all
-          - --disable=wsl
 
   # Lua specific
   - repo: https://github.com/JohnnyMorganz/StyLua
