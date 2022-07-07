@@ -19,6 +19,7 @@ repos:
       - id: check-symlinks
       - id: mixed-line-ending
         args: ["--fix=no"]
+      - id: no-commit-to-branch
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.26.3
     hooks:
