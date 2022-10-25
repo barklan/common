@@ -14,9 +14,10 @@ import (
 )
 
 func main() {
-	var workspaceDir, dstRegistry string
+	var workspaceDir, dstRegistry, ignorePrefix string
 	flag.StringVar(&workspaceDir, "dir", "", "Workspace directory")
 	flag.StringVar(&dstRegistry, "dst", "", "Destination registry")
+	flag.StringVar(&ignorePrefix, "ignore", "", "Ignore prefix")
 	flag.Parse()
 	if workspaceDir == "" || dstRegistry == "" {
 		panic("empty workspace or destination string")
@@ -38,7 +39,7 @@ func main() {
 	fatalOnErr("", err)
 	allImages := make([]string, 0)
 	for _, file := range files {
-		images, ok := findImagesInFile(file, reg)
+		images, ok := findImagesInFile(file, reg, ignorePrefix)
 		if !ok {
 			continue
 		}
@@ -54,7 +55,7 @@ func main() {
 	log.Println("All done!")
 }
 
-func findImagesInFile(file string, reg *regexp.Regexp) ([]string, bool) {
+func findImagesInFile(file string, reg *regexp.Regexp, ignorePrefix string) ([]string, bool) {
 	contents, err := ioutil.ReadFile(file)
 	fatalOnErr("", err)
 	matches := reg.FindAllStringSubmatch(string(contents), -1)
@@ -68,7 +69,9 @@ func findImagesInFile(file string, reg *regexp.Regexp) ([]string, bool) {
 		if image[0] == '/' {
 			image = image[1:]
 		}
-		images = append(images, image)
+		if !strings.HasPrefix(image, ignorePrefix) {
+			images = append(images, image)
+		}
 	}
 	return images, true
 }
