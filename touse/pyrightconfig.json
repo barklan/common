@@ -1,11 +1,16 @@
 {
-    "typeCheckingMode": "strict",
+    "typeCheckingMode": "basic",
     "extraPaths": [
         "__pypackages__/3.10/lib/"
     ],
     "exclude": [
         "**/.venv",
         "**/__pycache__"
+    ],
+    "ignore": [
+        "**/.venv",
+        "**/__pycache__",
+        "**/__pypackages__"
     ],
     "reportUnknownVariableType": false
 }
