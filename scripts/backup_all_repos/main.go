@@ -9,27 +9,30 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 )
 
 const (
-	backupDirPrefix = "hashi_"
-	shallow         = true
+	backupDirPrefix = "repos_"
+	shallow         = false
+	numWorkers      = 32
 )
 
 var ghOrgs = []string{
-	// "barklan",
+	"barklan",
+	"QuantaTeam",
 	// "barklan-junk-yard",
-	"hashicorp",
+	// "hashicorp",
 }
 
 // Don't use your GitLab username as organization!
 var glOrgs = []string{
 	// "nftgalleryx",
 	// "hrtalents",
-	// "qufiwefefwoyn",
+	"qufiwefefwoyn",
+	"hrtalents",
+	"nftgalleryx",
 }
 
 type ghJob struct {
@@ -108,7 +111,6 @@ func github(backupDir string) error {
 		numRepos := len(repos)
 		jobs := make(chan ghJob, numRepos)
 		results := make(chan struct{}, numRepos)
-		numWorkers := runtime.NumCPU() * 2
 		for w := 1; w <= numWorkers; w++ {
 			go worker(w, jobs, results)
 		}
@@ -136,7 +138,7 @@ func gitlab(backupDir string) error {
 		if err := os.Chdir(orgDir); err != nil {
 			return fmt.Errorf("failed to change directory to %s: %w", orgDir, err)
 		}
-		if _, err := exec.Command("glab", "repo", "clone", "-g", org).Output(); err != nil {
+		if _, err := exec.Command("glab", "repo", "clone", "-g", org, "--paginate").Output(); err != nil {
 			return fmt.Errorf("failed to clone repos from organization %s: %w", org, err)
 		}
 		if err := os.Chdir(wd); err != nil {
