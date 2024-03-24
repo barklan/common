@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # bash <(curl -s https://raw.githubusercontent.com/barklan/common/main/scripts/newsrv.sh)
-# bash <(curl -s https://scripts.barklan.com/newsrv.sh)
 
 function yes_or_no {
     while true; do
